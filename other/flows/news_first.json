@@ -1,0 +1,782 @@
+[
+    {
+        "id": "33324059e2587364",
+        "type": "telegram receiver",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "bot": "af3cbf490cdd4061",
+        "saveDataDir": "",
+        "filterCommands": false,
+        "x": 100,
+        "y": 200,
+        "wires": [
+            [
+                "64483dfa481b1e0f",
+                "ab9ac7ee55dbb982"
+            ],
+            [
+                "d3dcda8070db1d69"
+            ]
+        ]
+    },
+    {
+        "id": "9f71834da20e92ba",
+        "type": "mysql",
+        "z": "029e423b767bcd2f",
+        "mydb": "",
+        "name": "NewsDB",
+        "x": 530,
+        "y": 200,
+        "wires": [
+            [
+                "b72c4e1a1df1553a",
+                "e9b23b6588d4d2a5"
+            ]
+        ]
+    },
+    {
+        "id": "ab9ac7ee55dbb982",
+        "type": "function",
+        "z": "029e423b767bcd2f",
+        "name": "function 1",
+        "func": "if(msg.payload.content != '/del' && msg.payload.content != '/start'){\n    if(!('reply_to_message' in msg.originalMessage)){\n        \n        if(msg.payload.type == \"photo\"){\n            msg.topic = \"insert into posts(Txt, PostDate, WithImg) values\" +\n                \"( '\" + msg.payload.caption + \"' , now(), 'y');\" +\n                \"insert into postimgs(idPost, FileName) values\" +\n                \"((select id from posts order by id desc limit 1), '\" +\n                msg.payload.photos[3].file_unique_id + \".jpg\" + \"');\";\n            msg.filename= \"C:\\\\College\\\\3course\\\\Coursework\\\\mine\\\\URLs\\\\static\\\\images\\\\\" +\n                msg.payload.photos[3].file_unique_id + \".jpg\";\n            msg.url = msg.payload.weblink;\n        } \n\n        if(msg.payload.type == \"message\"){\n            msg.topic = \"insert into posts(Txt, PostDate, WithImg) values\" +\n                \"( '\" + msg.payload.content + \"' , now(), 'n');\" +\n                \"select * from posts limit 1\";\n        } \n\n        return msg;\n    }\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 200,
+        "wires": [
+            [
+                "b28a6d423c071ab4",
+                "cf89d8f593e42fbe",
+                "9f71834da20e92ba"
+            ]
+        ]
+    },
+    {
+        "id": "b28a6d423c071ab4",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "b72c4e1a1df1553a",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "23f10de9422643e2",
+        "type": "telegram sender",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "bot": "af3cbf490cdd4061",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 960,
+        "y": 200,
+        "wires": [
+            [
+                "b5f98949e0d081f6"
+            ]
+        ]
+    },
+    {
+        "id": "e9b23b6588d4d2a5",
+        "type": "function",
+        "z": "029e423b767bcd2f",
+        "name": "function 2",
+        "func": "var mes = {\n    'payload':{\n        'content': 'Новость успешно добавлена. ID новости = ' + msg.payload[0].insertId,\n        'type': 'message',\n        'chatId': msg.originalMessage.chat.id\n    }\n}\nreturn mes;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 200,
+        "wires": [
+            [
+                "bc8165842bf8b694",
+                "23f10de9422643e2"
+            ]
+        ]
+    },
+    {
+        "id": "bc8165842bf8b694",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "d3dcda8070db1d69",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 140,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "b5f98949e0d081f6",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "1f78635d2b744293",
+        "type": "telegram command",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "command": "/del",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "af3cbf490cdd4061",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 70,
+        "y": 420,
+        "wires": [
+            [
+                "42c5da9a0a1da8ab",
+                "e7479fd5b5c0ee2f"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "42c5da9a0a1da8ab",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 240,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "185612085536f853",
+        "type": "telegram reply",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "bot": "af3cbf490cdd4061",
+        "x": 680,
+        "y": 400,
+        "wires": [
+            [
+                "ed5b571cdab553a0",
+                "c5920aef2682e180"
+            ]
+        ]
+    },
+    {
+        "id": "ed5b571cdab553a0",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "64483dfa481b1e0f",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 120,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "3d619c974d771802",
+        "type": "telegram sender",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "bot": "af3cbf490cdd4061",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 450,
+        "y": 400,
+        "wires": [
+            [
+                "185612085536f853"
+            ]
+        ]
+    },
+    {
+        "id": "e7479fd5b5c0ee2f",
+        "type": "function",
+        "z": "029e423b767bcd2f",
+        "name": "function 3",
+        "func": "var mes = {\n    'payload':{\n        'content': 'Ответьте на это сообщение id номером новости, которую хотите удалить',\n        'type': 'message',\n        'chatId': msg.originalMessage.chat.id\n    }\n}\nreturn mes;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 400,
+        "wires": [
+            [
+                "3d619c974d771802"
+            ]
+        ]
+    },
+    {
+        "id": "7c530745096ca91f",
+        "type": "function",
+        "z": "029e423b767bcd2f",
+        "name": "function 4",
+        "func": "msg.topic = \"delete from postimgs where idPost = \" + msg.payload[0].id +\n\"; delete from posts where id = \" + msg.payload[0].id + \";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1440,
+        "y": 480,
+        "wires": [
+            [
+                "dfa4944c68a5c08c",
+                "fc00e9a2a67089da"
+            ]
+        ]
+    },
+    {
+        "id": "dfa4944c68a5c08c",
+        "type": "mysql",
+        "z": "029e423b767bcd2f",
+        "mydb": "",
+        "name": "",
+        "x": 1620,
+        "y": 480,
+        "wires": [
+            [
+                "069cb603a586d3c7"
+            ]
+        ]
+    },
+    {
+        "id": "069cb603a586d3c7",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1650,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "fc00e9a2a67089da",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1450,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "c18008d089e75a65",
+        "type": "file",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 720,
+        "y": 260,
+        "wires": [
+            [
+                "dbc1bba6e6a4aeb4"
+            ]
+        ]
+    },
+    {
+        "id": "dbc1bba6e6a4aeb4",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "cf89d8f593e42fbe",
+        "type": "http request",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "method": "GET",
+        "ret": "bin",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 260,
+        "wires": [
+            [
+                "c18008d089e75a65"
+            ]
+        ]
+    },
+    {
+        "id": "522986b4e304553a",
+        "type": "http in",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "url": "/news",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 580,
+        "wires": [
+            [
+                "a9ac20b089c2565b"
+            ]
+        ]
+    },
+    {
+        "id": "89822d288261e3b6",
+        "type": "mysql",
+        "z": "029e423b767bcd2f",
+        "mydb": "",
+        "name": "NewsDB",
+        "x": 500,
+        "y": 580,
+        "wires": [
+            [
+                "306ae11513b82a8c",
+                "d12d41a35998f868"
+            ]
+        ]
+    },
+    {
+        "id": "a9ac20b089c2565b",
+        "type": "function",
+        "z": "029e423b767bcd2f",
+        "name": "function 6",
+        "func": "msg.topic = \"select Txt, PostDate, WithImg, FileName from posts \" +\n            \"inner join postimgs on postimgs.idPost = posts.id union \"+\n            \"select Txt, PostDate, WithImg, '' as FileName from posts \"+\n            \"where WithImg ='n' order by PostDate desc;\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 580,
+        "wires": [
+            [
+                "89822d288261e3b6"
+            ]
+        ]
+    },
+    {
+        "id": "306ae11513b82a8c",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "c7c6377a98ec4846",
+        "type": "http request",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/news",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 370,
+        "y": 640,
+        "wires": [
+            [
+                "60d31d758262b4e2"
+            ]
+        ]
+    },
+    {
+        "id": "0c73c1f67e938fa7",
+        "type": "inject",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 640,
+        "wires": [
+            [
+                "c7c6377a98ec4846"
+            ]
+        ]
+    },
+    {
+        "id": "60d31d758262b4e2",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "d12d41a35998f868",
+        "type": "http response",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 690,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "c5920aef2682e180",
+        "type": "function",
+        "z": "029e423b767bcd2f",
+        "name": "function 5",
+        "func": "msg.topic = \"select * from posts where id = \"  + msg.payload.content;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 400,
+        "wires": [
+            [
+                "f8128ba6d0545ab2"
+            ]
+        ]
+    },
+    {
+        "id": "f8128ba6d0545ab2",
+        "type": "mysql",
+        "z": "029e423b767bcd2f",
+        "mydb": "",
+        "name": "",
+        "x": 1050,
+        "y": 400,
+        "wires": [
+            [
+                "7d71dd98807c7c4d",
+                "3ba4a66c5c2fb4b2",
+                "0f0653827c708bb3"
+            ]
+        ]
+    },
+    {
+        "id": "7d71dd98807c7c4d",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "3ba4a66c5c2fb4b2",
+        "type": "function",
+        "z": "029e423b767bcd2f",
+        "name": "function 7",
+        "func": "if (msg.payload[0].WithImg == 'y') {\n    msg.topic = \"select FileName from postimgs where idPost = \" + msg.payload[0].id;\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1260,
+        "y": 400,
+        "wires": [
+            [
+                "9353c0bb69d953d9"
+            ]
+        ]
+    },
+    {
+        "id": "9353c0bb69d953d9",
+        "type": "mysql",
+        "z": "029e423b767bcd2f",
+        "mydb": "",
+        "name": "",
+        "x": 1430,
+        "y": 400,
+        "wires": [
+            [
+                "599730024771841a",
+                "406de9984b3f078d"
+            ]
+        ]
+    },
+    {
+        "id": "599730024771841a",
+        "type": "debug",
+        "z": "029e423b767bcd2f",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1440,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "406de9984b3f078d",
+        "type": "function",
+        "z": "029e423b767bcd2f",
+        "name": "function 8",
+        "func": "msg.filename = \"C:\\\\College\\\\3course\\\\Coursework\\\\mine\\\\URLs\\\\static\\\\images\\\\\" + msg.payload[0].FileName;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1640,
+        "y": 400,
+        "wires": [
+            [
+                "6dfdaa102f387ac9"
+            ]
+        ]
+    },
+    {
+        "id": "6dfdaa102f387ac9",
+        "type": "file",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "delete",
+        "encoding": "none",
+        "x": 1800,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0f0653827c708bb3",
+        "type": "delay",
+        "z": "029e423b767bcd2f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 480,
+        "wires": [
+            [
+                "7c530745096ca91f"
+            ]
+        ]
+    },
+    {
+        "id": "af3cbf490cdd4061",
+        "type": "telegram bot",
+        "botname": "Hotel-Cocktail",
+        "usernames": "orliano780",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    }
+]

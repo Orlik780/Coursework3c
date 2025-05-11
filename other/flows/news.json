@@ -1,0 +1,521 @@
+[
+    {
+        "id": "6acd7657ada914c6",
+        "type": "telegram receiver",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "bot": "7e004749ba3ab99d",
+        "saveDataDir": "",
+        "filterCommands": false,
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "9c18eb1c5acc8819",
+                "37f9eb60202df8a9"
+            ],
+            [
+                "1efbdee3b50877ca"
+            ]
+        ]
+    },
+    {
+        "id": "9c18eb1c5acc8819",
+        "type": "debug",
+        "z": "f34a0e10b205d8b9",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 180,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "1efbdee3b50877ca",
+        "type": "debug",
+        "z": "f34a0e10b205d8b9",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 180,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "37f9eb60202df8a9",
+        "type": "function",
+        "z": "f34a0e10b205d8b9",
+        "name": "function 1",
+        "func": "var m2g = {}\n\nif(!('reply_to_message' in msg.originalMessage)){\n    if(msg.payload.type == 'message'){\n        if(msg.payload.content !='/start' && msg.payload.content !='/del'){\n            msg.topic = \"insert into posts(Txt, PostDate, WithImg) values\" +\n            \"('\"+ msg.payload.content + \"', now(), 'n');\"+\n            \"select id from posts limit 1\";\n            return msg;\n        }\n    }\n    if(msg.payload.type == 'photo'){\n        msg.topic = \"insert into posts(Txt, PostDate, WithImg) values\" +\n        \"('\"+ msg.payload.caption + \"', now(), 'y');\" +\n        \"insert into postimgs(idPost, FileName) values\"+\n        \"((select id from posts order by id desc limit 1), '\"+ msg.payload.photos[3].file_unique_id +\".png');\";\n        m2g={\n            \"url\": msg.payload.weblink,\n            \"filename\": \"C:\\\\College\\\\3course\\\\Coursework\\\\mine\\\\URLs\\\\static\\\\images\\\\\" + msg.payload.photos[3].file_unique_id + '.png'\n        }\n        return [msg, m2g];\n    }\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 100,
+        "wires": [
+            [
+                "0fe766b13ce66cf4"
+            ],
+            [
+                "8db95edfb7cd314b"
+            ]
+        ]
+    },
+    {
+        "id": "0fe766b13ce66cf4",
+        "type": "mysql",
+        "z": "f34a0e10b205d8b9",
+        "mydb": "47f1068139750809",
+        "name": "",
+        "x": 600,
+        "y": 100,
+        "wires": [
+            [
+                "356658fd5193bac0",
+                "328990cf797e6c43"
+            ]
+        ]
+    },
+    {
+        "id": "8db95edfb7cd314b",
+        "type": "http request",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "method": "GET",
+        "ret": "bin",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 610,
+        "y": 160,
+        "wires": [
+            [
+                "5b4809e44cc03e7f"
+            ]
+        ]
+    },
+    {
+        "id": "356658fd5193bac0",
+        "type": "debug",
+        "z": "f34a0e10b205d8b9",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "328990cf797e6c43",
+        "type": "function",
+        "z": "f34a0e10b205d8b9",
+        "name": "function 2",
+        "func": "var m2g = {\n    payload: {\n        'content': \"Новость успешно добавлена. ID новости = \" + msg.payload[0].insertId,\n        'type': 'message',\n        \"chatId\": msg.originalMessage.from.id\n    }\n}\nreturn m2g;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 100,
+        "wires": [
+            [
+                "28e5b7dcf02c5fbf"
+            ]
+        ]
+    },
+    {
+        "id": "28e5b7dcf02c5fbf",
+        "type": "telegram sender",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "bot": "7e004749ba3ab99d",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1050,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5b4809e44cc03e7f",
+        "type": "file",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 780,
+        "y": 160,
+        "wires": [
+            [
+                "9bcaa03bf0c913f2"
+            ]
+        ]
+    },
+    {
+        "id": "9bcaa03bf0c913f2",
+        "type": "debug",
+        "z": "f34a0e10b205d8b9",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "0d093be8f9d2b973",
+        "type": "telegram command",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "command": "/del",
+        "description": "",
+        "registercommand": false,
+        "language": "",
+        "scope": "default",
+        "bot": "7e004749ba3ab99d",
+        "strict": false,
+        "hasresponse": true,
+        "useregex": false,
+        "removeregexcommand": false,
+        "outputs": 2,
+        "x": 110,
+        "y": 320,
+        "wires": [
+            [
+                "823da40f24b2a131",
+                "52a722a0f89a12c4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "823da40f24b2a131",
+        "type": "debug",
+        "z": "f34a0e10b205d8b9",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 140,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "52a722a0f89a12c4",
+        "type": "function",
+        "z": "f34a0e10b205d8b9",
+        "name": "function 3",
+        "func": "var m2g = {\n    payload: {\n        'content': \"Чтобы удалить новость, ответте на это сообщение, написав id новости\",\n        'type': 'message',\n        \"chatId\": msg.payload.chatId\n    }\n}\nreturn m2g;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 300,
+        "wires": [
+            [
+                "68c5d115b7f1dc94"
+            ]
+        ]
+    },
+    {
+        "id": "68c5d115b7f1dc94",
+        "type": "telegram sender",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "bot": "7e004749ba3ab99d",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 490,
+        "y": 300,
+        "wires": [
+            [
+                "a3b5b797bc16ee03"
+            ]
+        ]
+    },
+    {
+        "id": "a3b5b797bc16ee03",
+        "type": "telegram reply",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "bot": "7e004749ba3ab99d",
+        "x": 700,
+        "y": 300,
+        "wires": [
+            [
+                "065722781c784b4c",
+                "d35b64854a147adc"
+            ]
+        ]
+    },
+    {
+        "id": "065722781c784b4c",
+        "type": "debug",
+        "z": "f34a0e10b205d8b9",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "d35b64854a147adc",
+        "type": "function",
+        "z": "f34a0e10b205d8b9",
+        "name": "function 4",
+        "func": "msg.topic = \"select id, WithImg from posts where id = \"+ msg.payload.content + \";\" +\n\"select FileName from postimgs where idPost = \" + msg.payload.content + \";\" +\n\"delete from postimgs where idPost = \"+ msg.payload.content +\";\" +\n\"delete from posts where id = \"+ msg.payload.content +\";\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 300,
+        "wires": [
+            [
+                "76c81d1b0ca4acf6"
+            ]
+        ]
+    },
+    {
+        "id": "76c81d1b0ca4acf6",
+        "type": "mysql",
+        "z": "f34a0e10b205d8b9",
+        "mydb": "47f1068139750809",
+        "name": "",
+        "x": 1080,
+        "y": 300,
+        "wires": [
+            [
+                "3556ae3d113a4402",
+                "34ef939db67bfda5"
+            ]
+        ]
+    },
+    {
+        "id": "3556ae3d113a4402",
+        "type": "debug",
+        "z": "f34a0e10b205d8b9",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "34ef939db67bfda5",
+        "type": "function",
+        "z": "f34a0e10b205d8b9",
+        "name": "function 5",
+        "func": "var m2g = {\n    payload: {\n        'content': \"Новость с id = \" +msg.payload[0][0].id + \" успешно удалена\",\n        'type': 'message',\n        \"chatId\": msg.originalMessage.from.id\n    }\n}\nif (msg.payload[0][0].WithImg == 'y'){\n    msg.filename = \"C:\\\\College\\\\3course\\\\Coursework\\\\mine\\\\URLs\\\\static\\\\images\\\\\" + msg.payload[1][0].FileName\n    return[m2g, msg];\n}\nelse{\n    return m2g\n}\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1260,
+        "y": 300,
+        "wires": [
+            [
+                "82ca4cbd63ee1754"
+            ],
+            [
+                "bf933c2bfd8c0b80"
+            ]
+        ]
+    },
+    {
+        "id": "bf933c2bfd8c0b80",
+        "type": "file",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "delete",
+        "encoding": "none",
+        "x": 1440,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "82ca4cbd63ee1754",
+        "type": "telegram sender",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "bot": "7e004749ba3ab99d",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1470,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "37970395e6340e37",
+        "type": "http in",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "url": "/news",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 440,
+        "wires": [
+            [
+                "982f13a6e928937c"
+            ]
+        ]
+    },
+    {
+        "id": "982f13a6e928937c",
+        "type": "function",
+        "z": "f34a0e10b205d8b9",
+        "name": "function 6",
+        "func": "msg.topic = \"select Txt, PostDate, WithImg, FileName from posts \" +\n\"inner join postimgs on postimgs.idPost = posts.id \" +\n\"union \" +\n\"select Txt, PostDate, WithImg, '' as FileName from posts \" +\n\"where WithImg ='n' \" +\n\"order by PostDate desc;\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 440,
+        "wires": [
+            [
+                "b6b1419f8a75aa1e"
+            ]
+        ]
+    },
+    {
+        "id": "b6b1419f8a75aa1e",
+        "type": "mysql",
+        "z": "f34a0e10b205d8b9",
+        "mydb": "47f1068139750809",
+        "name": "",
+        "x": 460,
+        "y": 440,
+        "wires": [
+            [
+                "c770cec165c68848"
+            ]
+        ]
+    },
+    {
+        "id": "c770cec165c68848",
+        "type": "http response",
+        "z": "f34a0e10b205d8b9",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 610,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "7e004749ba3ab99d",
+        "type": "telegram bot",
+        "botname": "HotelCocktail_Bot",
+        "usernames": "@orliano780",
+        "chatids": "1448212518",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "47f1068139750809",
+        "type": "MySQLdatabase",
+        "name": "NewsDB",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "news",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]

@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "hotel-cocktail",
+    "slug": "hotel-cocktail",
+    "version": "1.0.0",
+    "splash": {
+      "resizeMode": "contain",       
+      "backgroundColor": "#FFB841"
+    },
+    "orientation": "portrait",
+    "icon": "./assets/images/mineicon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/mineicon.png",
+        "backgroundColor": "#FFB841"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/mineicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/mineicon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#FFB841"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

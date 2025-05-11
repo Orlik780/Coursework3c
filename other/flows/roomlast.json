@@ -1,0 +1,2260 @@
+[
+    {
+        "id": "25cc5a4917a4c98c",
+        "type": "tab",
+        "label": "HotelRooms",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "915b03fdea0a2035",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/getAllRoomsID",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 100,
+        "wires": [
+            [
+                "f339d7282d224663"
+            ]
+        ]
+    },
+    {
+        "id": "6cac2a810450a169",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/getRoomData",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 160,
+        "wires": [
+            [
+                "3dc1709428d25afe"
+            ]
+        ]
+    },
+    {
+        "id": "f339d7282d224663",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 9",
+        "func": "msg.topic = 'select id from room'\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 100,
+        "wires": [
+            [
+                "340becac3fd7247a"
+            ]
+        ]
+    },
+    {
+        "id": "3dc1709428d25afe",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 10",
+        "func": "msg.topic = \n\"select RoomType, Price, RoomSize, sum(CountBed * BedType) as BedCount, RoomDescription, Advantages from Room \" +\n\"inner join RoomBeds on RoomBeds.idRoom = Room.id \" +\n\"group by Room.id \" +\n\"having Room.id = \" + msg.payload.id + \";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "55db4af747db0bc0"
+            ]
+        ]
+    },
+    {
+        "id": "340becac3fd7247a",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 100,
+        "wires": [
+            [
+                "ad05f3b2adb64cdc"
+            ]
+        ]
+    },
+    {
+        "id": "55db4af747db0bc0",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 160,
+        "wires": [
+            [
+                "77736ce872c29ef0"
+            ]
+        ]
+    },
+    {
+        "id": "ad05f3b2adb64cdc",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "77736ce872c29ef0",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "857a51fcf7c5f17e",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/getRoomDops",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 220,
+        "wires": [
+            [
+                "c1e57b0a8d78e2e9"
+            ]
+        ]
+    },
+    {
+        "id": "c1e57b0a8d78e2e9",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 11",
+        "func": "msg.topic = \n\"select conditioner, hairdryer, refrigerator, telephone, TV, Iron from dops \"+\n\"where idRoom = \" + msg.payload.id + \";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 220,
+        "wires": [
+            [
+                "73d7b2a71675fa80"
+            ]
+        ]
+    },
+    {
+        "id": "73d7b2a71675fa80",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 220,
+        "wires": [
+            [
+                "526cc47a1275beb8"
+            ]
+        ]
+    },
+    {
+        "id": "526cc47a1275beb8",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "ee69dbebd349aa86",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/getRoomData?id=22",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1150,
+        "y": 160,
+        "wires": [
+            [
+                "b02dd15e342659f5"
+            ]
+        ]
+    },
+    {
+        "id": "98cb65086c846471",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 940,
+        "y": 160,
+        "wires": [
+            [
+                "ee69dbebd349aa86"
+            ]
+        ]
+    },
+    {
+        "id": "b02dd15e342659f5",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 16",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1360,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "b6b9ec54688cbb7b",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/getRoomDops?id=22",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1150,
+        "y": 220,
+        "wires": [
+            [
+                "9a3e07641e710bd4"
+            ]
+        ]
+    },
+    {
+        "id": "c88ba404514d79f0",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 940,
+        "y": 220,
+        "wires": [
+            [
+                "b6b9ec54688cbb7b"
+            ]
+        ]
+    },
+    {
+        "id": "9a3e07641e710bd4",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1360,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "8e8d4d3c8bcbbbb5",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/getRoomMainIMG",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 280,
+        "wires": [
+            [
+                "5bc786d0a8c30c8c"
+            ]
+        ]
+    },
+    {
+        "id": "5bc786d0a8c30c8c",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 12",
+        "func": "msg.topic = \n\"select URL from imgURL \" +\n\"where Priority = 1 and idRoom = \" + msg.payload.id + \";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 280,
+        "wires": [
+            [
+                "973093b3d62742e7"
+            ]
+        ]
+    },
+    {
+        "id": "973093b3d62742e7",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 280,
+        "wires": [
+            [
+                "75c59157be55d979"
+            ]
+        ]
+    },
+    {
+        "id": "75c59157be55d979",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "f29c3364e6f5c761",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/getRoomMainIMG?id=22",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1150,
+        "y": 280,
+        "wires": [
+            [
+                "6817471d6c8b5089"
+            ]
+        ]
+    },
+    {
+        "id": "2dd42d0db830c6a3",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 940,
+        "y": 280,
+        "wires": [
+            [
+                "f29c3364e6f5c761"
+            ]
+        ]
+    },
+    {
+        "id": "6817471d6c8b5089",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 18",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1360,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "a301814e05aea553",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/getRoomsIMG",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 340,
+        "wires": [
+            [
+                "c26ef6ad9e202ad4"
+            ]
+        ]
+    },
+    {
+        "id": "c26ef6ad9e202ad4",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 13",
+        "func": "msg.topic = \n\"select URL from imgURL \" +\n\"where idRoom = \" + msg.payload.id + \" order by Priority;\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 340,
+        "wires": [
+            [
+                "457a1716554b034e"
+            ]
+        ]
+    },
+    {
+        "id": "457a1716554b034e",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 340,
+        "wires": [
+            [
+                "4cc4780129290ee1"
+            ]
+        ]
+    },
+    {
+        "id": "4cc4780129290ee1",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "4bac387cf7947a53",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/getRoomsIMG?id=22",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1150,
+        "y": 340,
+        "wires": [
+            [
+                "8ee951a509b384d4"
+            ]
+        ]
+    },
+    {
+        "id": "029bdde3bbcdf5b1",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 940,
+        "y": 340,
+        "wires": [
+            [
+                "4bac387cf7947a53"
+            ]
+        ]
+    },
+    {
+        "id": "8ee951a509b384d4",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 19",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1360,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "eeaadc4bc320eb45",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/getFiltredRoomsID",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 190,
+        "y": 440,
+        "wires": [
+            [
+                "e8c89a2c226f5601",
+                "7e3eb89a0bfa5fac"
+            ]
+        ]
+    },
+    {
+        "id": "e8c89a2c226f5601",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 14",
+        "func": "let cusl = 0;\nlet cusl1 = 0;\nlet topic = \"select room.id from room \" \n\nif ('bedscount' in msg.payload) {\n    topic += \"inner join RoomBeds on RoomBeds.idRoom = Room.id \";\n}\n\nif ('type' in msg.payload || 'minprice' in msg.payload || 'maxprice' in msg.payload || 'minsize' in msg.payload || 'maxsize' in msg.payload || \"conditioner\" in msg.payload || \"hairdryer\" in msg.payload || \"refrigerator\" in msg.payload || \"telephone\" in msg.payload || \"TV\" in msg.payload || \"Iron\" in msg.payload || \"DepartureDate\" in msg.payload){\n    topic += 'where ';\n    if('type' in msg.payload){\n        topic += \"RoomType = '\" + msg.payload.type + \"' \";\n        cusl += 1;\n    }\n    if('minprice' in msg.payload) {\n        if (cusl != 0){\n            topic += \"and \";\n        }\n        topic += \"Price >= \" + msg.payload.minprice + \" \";\n        cusl += 1;\n    }\n    if('maxprice' in msg.payload) {\n        if (cusl != 0){\n            topic += \"and \";\n        }\n        topic += \"Price <= \" + msg.payload.maxprice + \" \";\n        cusl += 1;\n    }\n    if('minsize' in msg.payload) {\n        if (cusl != 0){\n            topic += \"and \";\n        }\n        topic += \"RoomSize >= \" + msg.payload.minsize + \" \";\n        cusl += 1;\n    }\n    if('maxsize' in msg.payload) {\n        if (cusl != 0){\n            topic += \"and \";\n        }\n        topic += \"RoomSize <= \" + msg.payload.maxsize + \" \";\n        cusl += 1;\n    }\n    if (\"conditioner\" in msg.payload || \"hairdryer\" in msg.payload || \"refrigerator\" in msg.payload || \"telephone\" in msg.payload || \"TV\" in msg.payload || \"Iron\" in msg.payload) {\n        if (cusl != 0) {\n            topic += \"and \";\n        }\n        topic += \"Room.id in (select Room.id from Room inner join dops on dops.idRoom = Room.id where \";\n        if (\"conditioner\" in msg.payload) {\n            topic += \"conditioner = '\" + msg.payload.conditioner + \"' \";\n            cusl1 += 1;\n        }\n        if (\"hairdryer\" in msg.payload) {\n            if (cusl1 != 0) {\n                topic += \"and \";\n            }\n            topic += \"hairdryer = '\" + msg.payload.hairdryer + \"' \";\n            cusl1 += 1;\n        }\n        if (\"refrigerator\" in msg.payload) {\n            if (cusl1 != 0) {\n                topic += \"and \";\n            }\n            topic += \"refrigerator = '\" + msg.payload.refrigerator + \"' \";\n            cusl1 += 1;\n        }\n        if (\"telephone\" in msg.payload) {\n            if (cusl1 != 0) {\n                topic += \"and \";\n            }\n            topic += \"telephone = '\" + msg.payload.telephone + \"' \";\n            cusl1 += 1;\n        }\n        if (\"TV\" in msg.payload) {\n            if (cusl1 != 0) {\n                topic += \"and \";\n            }\n            topic += \"TV = '\" + msg.payload.TV + \"' \";\n            cusl1 += 1;\n        }\n        if (\"Iron\" in msg.payload) {\n            if (cusl1 != 0) {\n                topic += \"and \";\n            }\n            topic += \"Iron = '\" + msg.payload.Iron + \"' \";\n            cusl1 += 1;\n        }\n        cusl += 1;\n        topic += \") \"\n    } \n    if ('DepartureDate' in msg.payload) {\n        if (cusl != 0) {\n            topic += \"and \";\n        }\n        topic += \"room.id not in (select idRoom from Booking \" +\n            \"WHERE (CheckInDate <= '\" + msg.payload.CheckInDate + \"' AND DepartureDate > '\" + msg.payload.CheckInDate + \"') \" +\n            \"OR (CheckInDate < '\" + msg.payload.DepartureDate + \"'AND DepartureDate >= '\" + msg.payload.DepartureDate + \"') \" +\n            \"OR ('\" + msg.payload.CheckInDate + \"' < CheckInDate AND '\" + msg.payload.DepartureDate + \"' > DepartureDate)) \";\n        cusl += 1;\n    }\n}\nif ('bedscount' in msg.payload) {\n    topic += \"group by Room.id having sum(CountBed * BedType) = \" + msg.payload.bedscount;\n    cusl += 1;\n}\n\nmsg.topic = topic;\nreturn msg; ",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 440,
+        "wires": [
+            [
+                "c1144ea739b8c788",
+                "929931ab57b352f7"
+            ]
+        ]
+    },
+    {
+        "id": "929931ab57b352f7",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 440,
+        "wires": [
+            [
+                "f9a1b0d365f5236b"
+            ]
+        ]
+    },
+    {
+        "id": "f9a1b0d365f5236b",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "f8b4fa7b2f7735e6",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "http://127.0.0.1:1880/getFiltredRoomsID?type=Люкс&minprice=6000&maxprice=7000&minsize=40&maxsize=70&bedscount=4&conditioner=y&hairdryer=y&refrigerator=y&telephone=y&TV=y&Iron=y",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1190,
+        "y": 440,
+        "wires": [
+            [
+                "d40629c9056543e9"
+            ]
+        ]
+    },
+    {
+        "id": "8ae95e6ebea87eae",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 980,
+        "y": 440,
+        "wires": [
+            [
+                "f8b4fa7b2f7735e6"
+            ]
+        ]
+    },
+    {
+        "id": "d40629c9056543e9",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 20",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1400,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "c1144ea739b8c788",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 25",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 390,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "76e3562dd720e7f5",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/getBeds",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 500,
+        "wires": [
+            [
+                "672e73a650179499"
+            ]
+        ]
+    },
+    {
+        "id": "672e73a650179499",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 15",
+        "func": "msg.topic = \n\"select CountBed, BedType from RoomBeds \" +\n\"where idRoom = \" + msg.payload.id;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 500,
+        "wires": [
+            [
+                "640dfe6900a685c0"
+            ]
+        ]
+    },
+    {
+        "id": "640dfe6900a685c0",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 500,
+        "wires": [
+            [
+                "91822486c1c45bf2"
+            ]
+        ]
+    },
+    {
+        "id": "91822486c1c45bf2",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "14db16905c0966a6",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/getBeds?id=22",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1190,
+        "y": 500,
+        "wires": [
+            [
+                "058d9a66de1b2d54"
+            ]
+        ]
+    },
+    {
+        "id": "410bbc38a57e5545",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 980,
+        "y": 500,
+        "wires": [
+            [
+                "14db16905c0966a6"
+            ]
+        ]
+    },
+    {
+        "id": "058d9a66de1b2d54",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 26",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1400,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "b8a1e00012ed3c25",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/getUser",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 560,
+        "wires": [
+            [
+                "3c24fc362fddd830"
+            ]
+        ]
+    },
+    {
+        "id": "3c24fc362fddd830",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 16",
+        "func": "msg.topic = \n\"select id, firstName, lastName, middleName, email, phoneNumber, passportSeries, passportNumber from users \" +\n\"where email = '\" + msg.payload.email + \"';\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 560,
+        "wires": [
+            [
+                "0c92069755d438a3"
+            ]
+        ]
+    },
+    {
+        "id": "0c92069755d438a3",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 560,
+        "wires": [
+            [
+                "ee11c5ff61a9fe7f"
+            ]
+        ]
+    },
+    {
+        "id": "ee11c5ff61a9fe7f",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "469049753ff9890e",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/addUser",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 620,
+        "wires": [
+            [
+                "754f6d09df7f04c4"
+            ]
+        ]
+    },
+    {
+        "id": "754f6d09df7f04c4",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 17",
+        "func": "msg.topic = \n\"insert into users( firstName, lastName, email) values\" +\n\"('\" + msg.payload.firstName +  \"', '\" + msg.payload.lastName + \"', '\" + msg.payload.email + \"');\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 620,
+        "wires": [
+            [
+                "024bc65e4d73f163"
+            ]
+        ]
+    },
+    {
+        "id": "024bc65e4d73f163",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 620,
+        "wires": [
+            [
+                "a5bb6c8c233786c4"
+            ]
+        ]
+    },
+    {
+        "id": "a5bb6c8c233786c4",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "fa5e6dfc4836c9ef",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/addUser?email=gleborlov780@gmail.com&firstName=Ирина&lastName=Фролова",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1180,
+        "y": 620,
+        "wires": [
+            [
+                "c54aab3f461264bd"
+            ]
+        ]
+    },
+    {
+        "id": "b06616ce4a590125",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 980,
+        "y": 620,
+        "wires": [
+            [
+                "fa5e6dfc4836c9ef"
+            ]
+        ]
+    },
+    {
+        "id": "c54aab3f461264bd",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 23",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "7de1f90e4abbba5f",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/delUser",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 680,
+        "wires": [
+            [
+                "ca7c49b47f8c1dd1"
+            ]
+        ]
+    },
+    {
+        "id": "ca7c49b47f8c1dd1",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 18",
+        "func": "msg.topic = \n\"delete from SavedRooms \" +\n\"where idUser = \" + msg.payload.email + \"; \" +\n\"delete from Booking \" +\n\"where idUser = \" + msg.payload.email + \"; \" +\n\"delete from users \" +\n\"where id = \" + msg.payload.email + \";\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 680,
+        "wires": [
+            [
+                "b6afb35d098c03ee"
+            ]
+        ]
+    },
+    {
+        "id": "b6afb35d098c03ee",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 680,
+        "wires": [
+            [
+                "538a35347a86dfe0"
+            ]
+        ]
+    },
+    {
+        "id": "538a35347a86dfe0",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "59d3395010dce2ca",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/updEmail",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 760,
+        "wires": [
+            [
+                "986f125ae0213f63"
+            ]
+        ]
+    },
+    {
+        "id": "4eb9d0b9f7e89af3",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 730,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "986f125ae0213f63",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 20",
+        "func": "msg.topic = \n    \"UPDATE users SET email = '\" + msg.payload.newemail + \"' \"+\n    \"WHERE id = \" + msg.payload.id +\";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 760,
+        "wires": [
+            [
+                "8888a0a166ae24a5"
+            ]
+        ]
+    },
+    {
+        "id": "8888a0a166ae24a5",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 560,
+        "y": 760,
+        "wires": [
+            [
+                "4eb9d0b9f7e89af3"
+            ]
+        ]
+    },
+    {
+        "id": "d3aa3ec9fb016b7b",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/updEmail?id=2&newemail=gleborlov770@gmail.com",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1160,
+        "y": 760,
+        "wires": [
+            [
+                "55d7695a7103e9bb"
+            ]
+        ]
+    },
+    {
+        "id": "26a0f4bbd2b3303c",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 960,
+        "y": 760,
+        "wires": [
+            [
+                "d3aa3ec9fb016b7b"
+            ]
+        ]
+    },
+    {
+        "id": "55d7695a7103e9bb",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 21",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1360,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "a23b620236ece3a4",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/delUser?email=2",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1180,
+        "y": 680,
+        "wires": [
+            [
+                "932e447cbabcdf8c"
+            ]
+        ]
+    },
+    {
+        "id": "6be23f35802c2b00",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 980,
+        "y": 680,
+        "wires": [
+            [
+                "a23b620236ece3a4"
+            ]
+        ]
+    },
+    {
+        "id": "932e447cbabcdf8c",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "1e85a76a36e71b8d",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/updFName",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 840,
+        "wires": [
+            [
+                "493927169cf095b9"
+            ]
+        ]
+    },
+    {
+        "id": "493927169cf095b9",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 21",
+        "func": "msg.topic = \n    \"UPDATE users SET firstName = '\" + msg.payload.firstName + \"' \" +\n    \"WHERE email = '\" + msg.payload.email + \"';\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 840,
+        "wires": [
+            [
+                "2167789c37549241"
+            ]
+        ]
+    },
+    {
+        "id": "2167789c37549241",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 840,
+        "wires": [
+            [
+                "b88a8b487607129f"
+            ]
+        ]
+    },
+    {
+        "id": "b88a8b487607129f",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "dec61a4b35d9076a",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/updFName?email=gleborlov770@gmail.com&firstName=Даниил",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1190,
+        "y": 840,
+        "wires": [
+            [
+                "6e040daead442185"
+            ]
+        ]
+    },
+    {
+        "id": "acfd7b4de4d03cf7",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 990,
+        "y": 840,
+        "wires": [
+            [
+                "dec61a4b35d9076a"
+            ]
+        ]
+    },
+    {
+        "id": "6e040daead442185",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 24",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1390,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "5fd4493f2e64a7e6",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/updLName",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 900,
+        "wires": [
+            [
+                "2a92eff00c639da6"
+            ]
+        ]
+    },
+    {
+        "id": "2a92eff00c639da6",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 22",
+        "func": "msg.topic = \n    \"UPDATE users SET lastName = '\" + msg.payload.lastName + \"' \" +\n    \"WHERE email = '\" + msg.payload.email + \"';\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 900,
+        "wires": [
+            [
+                "3ca3e9746c1b62ae"
+            ]
+        ]
+    },
+    {
+        "id": "3ca3e9746c1b62ae",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 900,
+        "wires": [
+            [
+                "0e3977b54fca316f"
+            ]
+        ]
+    },
+    {
+        "id": "0e3977b54fca316f",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "3f488ce25990b663",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/updMName",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 960,
+        "wires": [
+            [
+                "9fc5dec4a92783f6"
+            ]
+        ]
+    },
+    {
+        "id": "9fc5dec4a92783f6",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 23",
+        "func": "msg.topic = \n    \"UPDATE users SET middleName = '\" + msg.payload.middleName + \"' \" +\n    \"WHERE email = '\" + msg.payload.email + \"';\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 960,
+        "wires": [
+            [
+                "7f6b73615158f4e9"
+            ]
+        ]
+    },
+    {
+        "id": "7f6b73615158f4e9",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 960,
+        "wires": [
+            [
+                "7a600ad9181f0cb7"
+            ]
+        ]
+    },
+    {
+        "id": "7a600ad9181f0cb7",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "7a2fa50c1a6d7894",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/updPhoneNumber",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 1020,
+        "wires": [
+            [
+                "eacbe7eb032e02b7"
+            ]
+        ]
+    },
+    {
+        "id": "eacbe7eb032e02b7",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 24",
+        "func": "msg.topic = \n    \"UPDATE users SET phoneNumber = '\" + msg.payload.phoneNumber + \"' \" +\n    \"WHERE email = '\" + msg.payload.email + \"';\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1020,
+        "wires": [
+            [
+                "801ae39061ebe70a"
+            ]
+        ]
+    },
+    {
+        "id": "801ae39061ebe70a",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 620,
+        "y": 1020,
+        "wires": [
+            [
+                "2e630da70fcf6197"
+            ]
+        ]
+    },
+    {
+        "id": "2e630da70fcf6197",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 790,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "daaf87fdaa3f14bc",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/updPassportSeries",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 1080,
+        "wires": [
+            [
+                "4a5548ff28bccb12"
+            ]
+        ]
+    },
+    {
+        "id": "4a5548ff28bccb12",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 25",
+        "func": "msg.topic = \n    \"UPDATE users SET passportSeries = '\" + msg.payload.passportSeries + \"' \" +\n    \"WHERE email = '\" + msg.payload.email + \"';\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1080,
+        "wires": [
+            [
+                "abf74075b4a9c9fa"
+            ]
+        ]
+    },
+    {
+        "id": "abf74075b4a9c9fa",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 620,
+        "y": 1080,
+        "wires": [
+            [
+                "c84ab08e0e245860"
+            ]
+        ]
+    },
+    {
+        "id": "c84ab08e0e245860",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 790,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "1b1c65c27da379e1",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/updPassportNumber",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 1140,
+        "wires": [
+            [
+                "631b48a70386c3fb"
+            ]
+        ]
+    },
+    {
+        "id": "631b48a70386c3fb",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 26",
+        "func": "msg.topic = \n    \"UPDATE users SET passportNumber = '\" + msg.payload.passportNumber + \"' \" +\n    \"WHERE email = '\" + msg.payload.email + \"';\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 1140,
+        "wires": [
+            [
+                "344e54009dfa11ed"
+            ]
+        ]
+    },
+    {
+        "id": "344e54009dfa11ed",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 620,
+        "y": 1140,
+        "wires": [
+            [
+                "8158eac04bdebacb"
+            ]
+        ]
+    },
+    {
+        "id": "8158eac04bdebacb",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 790,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "489236ad7df2631e",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/isSaved",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 1220,
+        "wires": [
+            [
+                "143227a8ef7554b6"
+            ]
+        ]
+    },
+    {
+        "id": "143227a8ef7554b6",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 19",
+        "func": "msg.topic = \n    \"select id from SavedRooms \" +\n    \"where idRoom = \"+ msg.payload.idRoom +\" and idUser = \"+ msg.payload.idUser +\";\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 1220,
+        "wires": [
+            [
+                "dafc3f1061c4385e"
+            ]
+        ]
+    },
+    {
+        "id": "dafc3f1061c4385e",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 560,
+        "y": 1220,
+        "wires": [
+            [
+                "f286ab14b104a3da"
+            ]
+        ]
+    },
+    {
+        "id": "d4537dfeeb243190",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 910,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "f286ab14b104a3da",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 27",
+        "func": "if (msg.payload[0]){\n    msg.payload = [\"true\"]\n} else {\n    msg.payload = [\"false\"]\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 1220,
+        "wires": [
+            [
+                "d4537dfeeb243190"
+            ]
+        ]
+    },
+    {
+        "id": "0cccae8ba4df835e",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/isSaved?idRoom=32&idUser=2",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1290,
+        "y": 1220,
+        "wires": [
+            [
+                "20765a78e4a36c76"
+            ]
+        ]
+    },
+    {
+        "id": "67ef50fe2d27bdf9",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1090,
+        "y": 1220,
+        "wires": [
+            [
+                "0cccae8ba4df835e"
+            ]
+        ]
+    },
+    {
+        "id": "20765a78e4a36c76",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 27",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1490,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "5bf79f8d787f64d2",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/isSaved?idRoom=22&idUser=2",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1290,
+        "y": 1180,
+        "wires": [
+            [
+                "3e0d50ec3f683d86"
+            ]
+        ]
+    },
+    {
+        "id": "cb0ea0cb1e846cf1",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1090,
+        "y": 1180,
+        "wires": [
+            [
+                "5bf79f8d787f64d2"
+            ]
+        ]
+    },
+    {
+        "id": "3e0d50ec3f683d86",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 28",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1490,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "0282bc015666033a",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/updSaved",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 1280,
+        "wires": [
+            [
+                "8118700cd0f0615d"
+            ]
+        ]
+    },
+    {
+        "id": "8118700cd0f0615d",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 28",
+        "func": "msg.topic = \n    \"select id from SavedRooms \" +\n    \"where idRoom = \"+ msg.payload.idRoom +\" and idUser = \"+ msg.payload.idUser +\";\";\nmsg.idr = msg.payload.idRoom;\nmsg.idu = msg.payload.idUser;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 1280,
+        "wires": [
+            [
+                "504df74fdad1856e"
+            ]
+        ]
+    },
+    {
+        "id": "504df74fdad1856e",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 560,
+        "y": 1280,
+        "wires": [
+            [
+                "743dc314e1e5ef01"
+            ]
+        ]
+    },
+    {
+        "id": "eac7ff57e9f70a95",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1130,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "743dc314e1e5ef01",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 29",
+        "func": "if (msg.payload[0]){\n    msg.topic = \"delete from SavedRooms where idRoom = \" + msg.idr + \" and idUser = \" + msg.idu +\";\";\n} else {\n    msg.topic = \"insert into SavedRooms(idRoom, idUser) values \" +\n        \"(\" + msg.idr + \",\" + msg.idu + \");\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 1280,
+        "wires": [
+            [
+                "79d9b0a62bac388d"
+            ]
+        ]
+    },
+    {
+        "id": "79d9b0a62bac388d",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 940,
+        "y": 1280,
+        "wires": [
+            [
+                "eac7ff57e9f70a95"
+            ]
+        ]
+    },
+    {
+        "id": "e72c403ebb979ecd",
+        "type": "http request",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/updSaved?idRoom=32&idUser=2",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1530,
+        "y": 1280,
+        "wires": [
+            [
+                "ee32a6ac2777d2f3"
+            ]
+        ]
+    },
+    {
+        "id": "70c07ea46c4437b1",
+        "type": "inject",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1330,
+        "y": 1280,
+        "wires": [
+            [
+                "e72c403ebb979ecd"
+            ]
+        ]
+    },
+    {
+        "id": "ee32a6ac2777d2f3",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 29",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1730,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "fe5cbddf9830de26",
+        "type": "http in",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "url": "/getSaved",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 180,
+        "y": 1340,
+        "wires": [
+            [
+                "0f1270e5625e6da0"
+            ]
+        ]
+    },
+    {
+        "id": "0f1270e5625e6da0",
+        "type": "function",
+        "z": "25cc5a4917a4c98c",
+        "name": "function 30",
+        "func": "msg.topic = \n    \"select idRoom as id from SavedRooms where idUser = \" + msg.payload.idUser + \";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1340,
+        "wires": [
+            [
+                "b97c06c4c343dd05"
+            ]
+        ]
+    },
+    {
+        "id": "b97c06c4c343dd05",
+        "type": "mysql",
+        "z": "25cc5a4917a4c98c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 600,
+        "y": 1340,
+        "wires": [
+            [
+                "e8eedc269f088b94"
+            ]
+        ]
+    },
+    {
+        "id": "e8eedc269f088b94",
+        "type": "http response",
+        "z": "25cc5a4917a4c98c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 790,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "7e3eb89a0bfa5fac",
+        "type": "debug",
+        "z": "25cc5a4917a4c98c",
+        "name": "debug 31",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 190,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "4a3d0bfc097f30fb",
+        "type": "MySQLdatabase",
+        "name": "Room&UserDB",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "RoomsAndUsers",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]

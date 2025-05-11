@@ -1,0 +1,1 @@
+export const linkServe = 'http://192.168.117.111'; // http://192.168.117.111 http://192.168.0.101 - local server link

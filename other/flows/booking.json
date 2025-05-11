@@ -1,0 +1,612 @@
+[
+    {
+        "id": "fa86a3888551290c",
+        "type": "tab",
+        "label": "Booking",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "35dcaa174227701f",
+        "type": "http in",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "url": "/isAvailable",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 60,
+        "wires": [
+            [
+                "2c4414e180e32ab7"
+            ]
+        ]
+    },
+    {
+        "id": "2c4414e180e32ab7",
+        "type": "function",
+        "z": "fa86a3888551290c",
+        "name": "function 31",
+        "func": "msg.topic = \"SELECT COUNT(*) AS Available FROM Booking \" +\n    \"WHERE idRoom = \" + msg.payload.idRoom +\n    \" AND((CheckInDate <= '\" + msg.payload.CheckInDate + \"' AND DepartureDate > '\" + msg.payload.CheckInDate + \"') \" +\n    \"OR (CheckInDate < '\" + msg.payload.DepartureDate + \"'AND DepartureDate >= '\" + msg.payload.DepartureDate + \"') \" +\n    \"OR('\" + msg.payload.CheckInDate + \"' < CheckInDate AND '\" + msg.payload.DepartureDate + \"' > DepartureDate)); \" +\n    \"SELECT COUNT(*) AS AvailableCheckOut FROM Booking \" +\n    \"WHERE idRoom = \" + msg.payload.idRoom +\n    \" AND((CheckInDate <= '\" + msg.payload.CheckInDate + \"' AND DepartureDate > '\" + msg.payload.CheckInDate + \"') \" +\n    \"OR (CheckInDate <= '\" + msg.payload.DepartureDate + \"'AND DepartureDate >= '\" + msg.payload.DepartureDate + \"') \" +\n    \"OR('\" + msg.payload.CheckInDate + \"' < CheckInDate AND '\" + msg.payload.DepartureDate + \"' > DepartureDate)); \" +\n    \"SELECT COUNT(*) AS AvailableCheckIn FROM Booking \" +\n    \"WHERE idRoom = \" + msg.payload.idRoom +\n    \" AND((CheckInDate <= '\" + msg.payload.CheckInDate + \"' AND DepartureDate >= '\" + msg.payload.CheckInDate + \"') \" +\n    \"OR (CheckInDate < '\" + msg.payload.DepartureDate + \"'AND DepartureDate >= '\" + msg.payload.DepartureDate + \"') \" +\n    \"OR('\" + msg.payload.CheckInDate + \"' < CheckInDate AND '\" + msg.payload.DepartureDate + \"' > DepartureDate));\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 60,
+        "wires": [
+            [
+                "f692c477366d33f2"
+            ]
+        ]
+    },
+    {
+        "id": "f692c477366d33f2",
+        "type": "mysql",
+        "z": "fa86a3888551290c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 580,
+        "y": 60,
+        "wires": [
+            [
+                "3cd016467ea9ea7a"
+            ]
+        ]
+    },
+    {
+        "id": "b147222a894b3a40",
+        "type": "http response",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 950,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "c4da8ad903f9896b",
+        "type": "debug",
+        "z": "fa86a3888551290c",
+        "name": "debug 33",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "3cd016467ea9ea7a",
+        "type": "function",
+        "z": "fa86a3888551290c",
+        "name": "function 32",
+        "func": "var newmsg = msg;\nnewmsg.payload = [{\n    \"Available\": msg.payload[0][0].Available,\n    \"AvailableCheckOut\": msg.payload[1][0].AvailableCheckOut,\n    \"AvailableCheckIn\": msg.payload[2][0].AvailableCheckIn\n}]\nreturn newmsg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 60,
+        "wires": [
+            [
+                "b147222a894b3a40",
+                "c4da8ad903f9896b"
+            ]
+        ]
+    },
+    {
+        "id": "897c75f4881f8afe",
+        "type": "debug",
+        "z": "fa86a3888551290c",
+        "name": "debug 30",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1540,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "6c8be2c3225ee9c7",
+        "type": "inject",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1140,
+        "y": 60,
+        "wires": [
+            [
+                "775a06cdba9e8155"
+            ]
+        ]
+    },
+    {
+        "id": "775a06cdba9e8155",
+        "type": "http request",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/isAvailable?idRoom=32&CheckInDate=2025-04-13&DepartureDate=2025-04-19",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1350,
+        "y": 60,
+        "wires": [
+            [
+                "897c75f4881f8afe"
+            ]
+        ]
+    },
+    {
+        "id": "a82b74fec771e250",
+        "type": "http in",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "url": "/booking",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 200,
+        "wires": [
+            [
+                "e3e02a05d7d253fd",
+                "2a45ed8f910f8280"
+            ]
+        ]
+    },
+    {
+        "id": "e3e02a05d7d253fd",
+        "type": "function",
+        "z": "fa86a3888551290c",
+        "name": "function 34",
+        "func": "msg.topic = \"INSERT INTO booking(idRoom, idUser, CheckInDate, DepartureDate, EarlyCheckIn, LateDeparture, Meal, Peoples, TotalPrice) \" + \n    \"VALUES(\" + msg.payload.idRoom + \", \" + msg.payload.idUser + \", '\" + msg.payload.CheckInDate + \"', '\" + msg.payload.DepartureDate + \"', '\" + msg.payload.EarlyCheckIn + \"', '\" + msg.payload.LateDeparture + \"', '\" + msg.payload.Meal + \"', \" + msg.payload.Peoples + \", \" + msg.payload.TotalPrice +\");\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 200,
+        "wires": [
+            [
+                "0273f3b7aa0a6a92"
+            ]
+        ]
+    },
+    {
+        "id": "0273f3b7aa0a6a92",
+        "type": "mysql",
+        "z": "fa86a3888551290c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 580,
+        "y": 200,
+        "wires": [
+            [
+                "b04c587adbbb5f0f"
+            ]
+        ]
+    },
+    {
+        "id": "b04c587adbbb5f0f",
+        "type": "http response",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "2a45ed8f910f8280",
+        "type": "debug",
+        "z": "fa86a3888551290c",
+        "name": "debug 32",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "9f932145bce87851",
+        "type": "debug",
+        "z": "fa86a3888551290c",
+        "name": "debug 34",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1360,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "7bd17370d11965f7",
+        "type": "inject",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 960,
+        "y": 200,
+        "wires": [
+            [
+                "cb40a3999762eee0"
+            ]
+        ]
+    },
+    {
+        "id": "cb40a3999762eee0",
+        "type": "http request",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/booking?idRoom=21&idUser=5&CheckInDate=2025-4-30&DepartureDate=2025-5-1&EarlyCheckIn=n&LateDeparture=n&Meal=y&Peoples=2&TotalPrice=20000",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1170,
+        "y": 200,
+        "wires": [
+            [
+                "9f932145bce87851"
+            ]
+        ]
+    },
+    {
+        "id": "add5d70815cad84c",
+        "type": "function",
+        "z": "fa86a3888551290c",
+        "name": "function 33",
+        "func": "msg.topic = \"DELETE FROM Booking WHERE (id = \"+ msg.payload.ID +\");\"\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 280,
+        "wires": [
+            [
+                "aefaf4e26454ecfb"
+            ]
+        ]
+    },
+    {
+        "id": "b2ee7b384995db49",
+        "type": "http in",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "url": "/delBooking",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 280,
+        "wires": [
+            [
+                "add5d70815cad84c"
+            ]
+        ]
+    },
+    {
+        "id": "aefaf4e26454ecfb",
+        "type": "mysql",
+        "z": "fa86a3888551290c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 580,
+        "y": 280,
+        "wires": [
+            [
+                "2e0d760983e253c2"
+            ]
+        ]
+    },
+    {
+        "id": "2e0d760983e253c2",
+        "type": "http response",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "498fb8f0d3cb2dc4",
+        "type": "debug",
+        "z": "fa86a3888551290c",
+        "name": "debug 35",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1360,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "a34a8bfec173b5b2",
+        "type": "inject",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 960,
+        "y": 280,
+        "wires": [
+            [
+                "39514b5d55a4f332"
+            ]
+        ]
+    },
+    {
+        "id": "39514b5d55a4f332",
+        "type": "http request",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:1880/delBooking?ID=3",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1170,
+        "y": 280,
+        "wires": [
+            [
+                "498fb8f0d3cb2dc4"
+            ]
+        ]
+    },
+    {
+        "id": "f7025fd87b0d9d42",
+        "type": "http in",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "url": "/getBooked",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 360,
+        "wires": [
+            [
+                "7d8b1d4ce0c5ebb8"
+            ]
+        ]
+    },
+    {
+        "id": "7d8b1d4ce0c5ebb8",
+        "type": "function",
+        "z": "fa86a3888551290c",
+        "name": "function 35",
+        "func": "msg.topic = \n    \"select id, idRoom from booking where idUser = \" + msg.payload.idUser + \" order by CheckInDate desc;\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 360,
+        "wires": [
+            [
+                "79db417f077971ce"
+            ]
+        ]
+    },
+    {
+        "id": "79db417f077971ce",
+        "type": "mysql",
+        "z": "fa86a3888551290c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 580,
+        "y": 360,
+        "wires": [
+            [
+                "a6dcd332214436f0"
+            ]
+        ]
+    },
+    {
+        "id": "a6dcd332214436f0",
+        "type": "http response",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "d7697d389f110883",
+        "type": "http in",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "url": "/getBookingInfo",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 420,
+        "wires": [
+            [
+                "a917da7e5f1efb07"
+            ]
+        ]
+    },
+    {
+        "id": "a917da7e5f1efb07",
+        "type": "function",
+        "z": "fa86a3888551290c",
+        "name": "function 36",
+        "func": "msg.topic = \n    \"select * from booking where id = \" + msg.payload.ID + \";\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 420,
+        "wires": [
+            [
+                "5046bdd84a165e9d",
+                "f1df942eb207ed84"
+            ]
+        ]
+    },
+    {
+        "id": "5046bdd84a165e9d",
+        "type": "mysql",
+        "z": "fa86a3888551290c",
+        "mydb": "4a3d0bfc097f30fb",
+        "name": "",
+        "x": 580,
+        "y": 420,
+        "wires": [
+            [
+                "f7381de254ceb973"
+            ]
+        ]
+    },
+    {
+        "id": "f7381de254ceb973",
+        "type": "http response",
+        "z": "fa86a3888551290c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 770,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "f1df942eb207ed84",
+        "type": "debug",
+        "z": "fa86a3888551290c",
+        "name": "debug 36",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 530,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "4a3d0bfc097f30fb",
+        "type": "MySQLdatabase",
+        "name": "Room&UserDB",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "RoomsAndUsers",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
